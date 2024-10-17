@@ -1,0 +1,30 @@
+const express = require("express");
+const app = express();
+const { sequelize } = require("./models");
+const cors = require("cors");
+app.use(express.json());
+const rx_group =  require("./routes/rx_routes.js");
+app.use(express.urlencoded({ extended: true }));
+require('dotenv').config();
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "http://192.168.134.131:3000",
+      "http://localhost:5173",
+      "http://localhost:3001",
+    ],
+    credentials: true,
+  })
+);
+app.use(express.static("public"));
+
+app.use("/rx_group", rx_group);
+
+sequelize.authenticate().then((req) => {
+  app.listen(5000, function () {
+    console.log("Server is running on port 5000");
+  });
+});
+
+
