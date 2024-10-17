@@ -22,8 +22,14 @@ module.exports = {
       drug_varient: {
         type: Sequelize.STRING
       },
-      duration: {
-        type: Sequelize.STRING
+      duration_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Durations',
+          key: 'id',        
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       quantity: {
         type: Sequelize.INTEGER

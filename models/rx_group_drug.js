@@ -15,6 +15,11 @@ module.exports = (sequelize, DataTypes) => {
         as: 'When', 
       });
 
+      Rx_group_drug.belongsTo(models.Duration, {
+        foreignKey: 'duration_id',
+        as: 'Duration', 
+      });
+
       Rx_group_drug.belongsTo(models.Time, {
         foreignKey: 'time_id',
         as: 'Time', 
@@ -33,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       rx_group_id: DataTypes.INTEGER,
       drug_varient_id: DataTypes.INTEGER,
       catagory_id: DataTypes.INTEGER,
-      duration: DataTypes.STRING,
+      duration_id: DataTypes.INTEGER,
       quantity: DataTypes.INTEGER,
       dose_m: DataTypes.INTEGER,
       dose_an: DataTypes.INTEGER,

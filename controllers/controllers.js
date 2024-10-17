@@ -1,4 +1,7 @@
-const { login_data, get_rx_group, get_drug, insert_rx_group, insert_rx_drug, rename_rx_group, set_rx_active, delete_rx_drug, get_drug_when } = require("../rx_group/rx_group.js");
+const { login_data, get_rx_group, get_drug, insert_rx_group, 
+  insert_rx_drug, rename_rx_group, set_rx_active, delete_rx_drug,
+   get_drug_when, get_drug_frequency, get_drug_time, get_drug_duration,
+    set_rx_drug_update1, set_rx_drug_update2 } = require("../rx_group/rx_group.js");
 const bcrypt = require('bcrypt');
 
 const login = (req, res) => {
@@ -16,6 +19,7 @@ const login = (req, res) => {
 
 
 
+
 const get_rx = (req, res) => {
   const { doctor_id } = req.body;
   get_rx_group(doctor_id, (err, result) => {
@@ -26,6 +30,7 @@ const get_rx = (req, res) => {
     }
   });
 };
+
 
 const get_drug_data = (req, res) => {
   get_drug( (err, result) => {
@@ -125,6 +130,7 @@ const get_when = (req, res) => {
 const get_frequency = (req, res) => {
   get_drug_frequency( (err, result) => {
     if (err) {
+      console.error("Error fetching When data:", err);
       res.status(500).json({ message: "Internal Server Error" });
     } else {
       res.status(200).json(result);
@@ -136,11 +142,55 @@ const get_frequency = (req, res) => {
 const get_time = (req, res) => {
   get_drug_time( (err, result) => {
     if (err) {
+      console.error("Error fetching When data:", err);
       res.status(500).json({ message: "Internal Server Error" });
     } else {
       res.status(200).json(result);
     }
   });
+};
+
+
+const get_duration = (req, res) => {
+  get_drug_duration( (err, result) => {
+    if (err) {
+      console.error("Error fetching Duration data:", err);
+      res.status(500).json({ message: "Internal Server Error" });
+    } else {
+      res.status(200).json(result);
+    }
+  });
+};
+
+
+const rx_drug_update1 = async (req, res) => {
+  try {
+    const { rx_group_id, drug_varient_id, when_id, frequency_id, time_id
+     } = req.body; 
+    await set_rx_drug_update1(rx_group_id, drug_varient_id, when_id,frequency_id, time_id,  (error, result) => {
+      if (error) {
+        console.error("Failed to Change the when:", error.message);
+      }
+      res.status(200).json({ message: 'Rx group drug successfully.' });
+    });
+  } catch (error) {
+    console.error("Error:", error.message);
+  }
+};
+
+
+const rx_drug_update2 = async (req, res) => {
+  try {
+    const { rx_group_id, drug_varient_id, dose_m, dose_an, dose_n } = req.body; 
+    await set_rx_drug_update2(rx_group_id, drug_varient_id, dose_m, dose_an, dose_n,  (error, result) => {
+      if (error) {
+        console.error("Failed to Change the dose:", error.message);
+      }
+      res.status(200).json({ message: 'Rx group drug successfully.' });
+    });
+  } catch (error) {
+    console.error("Error:", error.message);
+  }
 };
 
 
@@ -160,5 +210,8 @@ module.exports = {
   rx_active,
   get_when,
   get_time,
-  get_frequency
+  get_duration,
+  get_frequency,
+  rx_drug_update1,
+  rx_drug_update2
 };

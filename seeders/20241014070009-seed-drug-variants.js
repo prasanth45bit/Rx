@@ -5,7 +5,7 @@ module.exports = {
     return queryInterface.bulkInsert('Drug_varients', [
       {
         drug_varient: 'Variant 500mg',
-        duration: '1 week',
+        duration_id: 7,
         quantity: 7,
         dose_m: 1,
         dose_an: 0,
@@ -19,7 +19,7 @@ module.exports = {
       },
       {
         drug_varient: 'Variant 250mg',
-        duration: '2 weeks',
+        duration_id: 6,
         quantity: 14,
         dose_m: 2,
         dose_an: 0,
@@ -33,7 +33,7 @@ module.exports = {
       },
       {
         drug_varient: 'Variant 125mg',
-        duration: '5 days',
+        duration_id: 5,
         quantity: 5,
         dose_m: 0,
         dose_an: 1,

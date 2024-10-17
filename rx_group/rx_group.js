@@ -1,5 +1,5 @@
 const { where } = require("sequelize");
-const { Doctors, Rx_group,Rx_group_drug, Drug_varient, Drugs,When,Time, Frequency, Drug_catagory, Doctor_languages,Doctor_hospitals, Specialty, Languages, Doctor_specialty } = require("../models");
+const { Doctors, Rx_group,Rx_group_drug, Drug_varient, Drugs,When,Time, Frequency, Drug_catagory, Doctor_languages,Doctor_hospitals, Specialty, Languages, Doctor_specialty, Duration } = require("../models");
 const { removeAllListeners } = require("process");
 
 
@@ -92,6 +92,7 @@ const get_drug = async (callback) => {
 
 
     const processedVariants = await Promise.all(drugVariants.map(async (variant) => {
+      const duration = variant.duration_id ? await Duration.findOne({ where: { id: variant.duration_id },  attributes: ['duration_count','duration_type'], }) : null;
       const time = variant.time_id ? await Time.findOne({ where: { id: variant.time_id },  attributes: ['time'], }) : null;
       const when = variant.when_id ? await When.findOne({ where: { id: variant.when_id },  attributes: ['when'], }) : null;
       const frequency = variant.frequency_id ? await Frequency.findOne({ where: { id: variant.frequency_id },  attributes: ['frequency'],  }) : null;
@@ -101,6 +102,7 @@ const get_drug = async (callback) => {
         Time: time,
         When: when,
         Frequency: frequency,
+        Duration: duration
       };
     }));
 
@@ -141,7 +143,7 @@ const insert_rx_drug = async (rxDrugData) => {
           rxDrugsData.push({
             rx_group_id: rx_group_id,
             drug_varient_id: variant.id,
-            duration: variant.duration,
+            duration_id: variant.duration_id,
             quantity: variant.quantity,
             dose_m: variant.dose_m,
             dose_an: variant.dose_an,
@@ -233,13 +235,88 @@ const delete_rx_drug = async (rx_group_id, drug_varient_id, callback) => {
 const get_drug_when = async (callback) => {
   try {
     const WhenData = await When.findAll({});
-    callback(null, whenData);
+    callback(null, WhenData);
   } catch (error) {
     console.error("Error during fetching Rx group data: ", error);
     callback(error, null);
   }
 };
 
+
+const get_drug_frequency = async (callback) => {
+  try {
+    const FrequencyData = await Frequency.findAll({});
+    callback(null, FrequencyData);
+  } catch (error) {
+    console.error("Error during fetching Rx group data: ", error);
+    callback(error, null);
+  }
+};
+
+
+const get_drug_time = async (callback) => {
+  try {
+    const TimeData = await Time.findAll({});
+    callback(null, TimeData);
+  } catch (error) {
+    console.error("Error during fetching Rx group data: ", error);
+    callback(error, null);
+  }
+};
+
+
+const get_drug_duration = async (callback) => {
+  try {
+    const DurationData = await Duration.findAll({});
+    callback(null, DurationData);
+  } catch (error) {
+    console.error("Error during fetching Rx group data: ", error);
+    callback(error, null);
+  }
+};
+
+
+const set_rx_drug_update1 = async (rx_group_id, drug_varient_id, when_id,frequency_id, time_id, callback) => {
+  try {
+    const result = await Rx_group_drug.update(
+      { when_id: when_id ,
+        time_id: time_id,
+        frequency_id: frequency_id
+      },
+      { where: { rx_group_id: rx_group_id, drug_varient_id: drug_varient_id } } 
+    );
+
+    if (result[0] === 0) {
+      return callback(new Error("Rx group not found or no update was made"), null);
+    }
+    callback(null, { message: "Rx group name updated successfully" });
+  } catch (error) {
+    console.error("Error updating Rx group name: ", error);
+    callback(error, null);
+  }
+};
+
+
+
+const set_rx_drug_update2 = async (rx_group_id, drug_varient_id,dose_m,dose_an,dose_n, callback) => {
+  try {
+    const result = await Rx_group_drug.update(
+      { dose_m: dose_m ,
+        dose_an: dose_an,
+        dose_n: dose_n
+      },
+      { where: { rx_group_id: rx_group_id, drug_varient_id: drug_varient_id } } 
+    );
+
+    if (result[0] === 0) {
+      return callback(new Error("Rx group not found or no update was made"), null);
+    }
+    callback(null, { message: "Rx group name updated successfully" });
+  } catch (error) {
+    console.error("Error updating Rx group name: ", error);
+    callback(error, null);
+  }
+};
 
 
 module.exports = {
@@ -251,5 +328,10 @@ module.exports = {
   rename_rx_group,
   set_rx_active,
   delete_rx_drug,
-  get_drug_when
+  get_drug_when,
+  get_drug_frequency,
+  get_drug_time,
+  get_drug_duration,
+  set_rx_drug_update1,
+  set_rx_drug_update2
 };
