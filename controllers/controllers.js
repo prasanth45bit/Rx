@@ -4,6 +4,8 @@ const { login_data, get_rx_group, get_drug, insert_rx_group,
     set_rx_drug_update1, set_rx_drug_update2 } = require("../rx_group/rx_group.js");
 const bcrypt = require('bcrypt');
 
+
+
 const login = (req, res) => {
   const { email, password } = req.body;
   login_data(email, password, (error, doctor) => {

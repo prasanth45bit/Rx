@@ -7,7 +7,7 @@
       static associate(models) {
         Time.hasMany(models.Drug_varient, {
           foreignKey: 'time_id',
-          as: 'Time-varient',
+          as: 'drugVariantsTime',
         });
 
         Time.hasMany(models.Rx_group_drug, {

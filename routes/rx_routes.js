@@ -9,8 +9,8 @@ const {
   } = require("../controllers/controllers.js");
 
 
-  router.get("/login", login);
-  router.get("/get_rx",get_rx);
+  router.post("/login", login);
+  router.post("/get_rx",get_rx);
   router.get("/get_drug",get_drug_data);
   router.post("/post_rx",post_rx);
   router.post("/post_rx_drug",post_rx_drug);

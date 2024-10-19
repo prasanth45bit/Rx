@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       When.hasMany(models.Drug_varient, {
         foreignKey: 'when_id',
-        as: 'When_varient',
+        as: 'drugVariantsWhen',
       });
 
       When.hasMany(models.Rx_group_drug, {

@@ -48,30 +48,53 @@ const login_data = async (email, password, callback) => {
 
 const get_rx_group = async (doctor_id, callback) => {
   try {
-    const rx_group = await Rx_group.findAll({
+    const rxGroups = await Rx_group.findAll({
       where: { doctor_id },
       include: [
         {
           model: Rx_group_drug,
           include: [
             {
-              model: Drug_varient, 
+              model: Drug_varient,
             },
-          ],
+
+              {
+                model: Duration,
+                as: 'drugVariantsDuration', 
+                attributes: ['duration_count', 'duration_type'],
+              },
+              {
+                model: Time,
+                as: 'drugVariantsTime', 
+                attributes: ['time'],
+              },
+              {
+                model: When,
+                as: 'drugVariantsWhen', // Make sure this matches your actual alias
+                attributes: ['when'],
+              },
+              {
+                model: Frequency,
+                as: 'drugVariantsFrequency', // Update to the new alias
+                attributes: ['frequency'],
+              },
+            ],
         },
       ],
     });
 
-    if (!rx_group || rx_group.length === 0) {
-      return callback(new Error("Rx group or related data not found"), null);
+    if (!rxGroups || rxGroups.length === 0) {
+      return callback(new Error("RX groups or related data not found"), null);
     }
 
-    callback(null, rx_group);
+    callback(null, rxGroups);
   } catch (error) {
-    console.error("Error during fetching Rx group data: ", error);
+    console.error("Error during fetching RX drug data: ", error);
     callback(error, null);
   }
 };
+
+
 
 const get_drug = async (callback) => {
   try {

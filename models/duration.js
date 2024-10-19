@@ -7,12 +7,12 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Duration.hasMany(models.Drug_varient, {
         foreignKey: 'duration_id',
-        as: 'duration_varient',
+        as: 'drugVariantsDuration',
       });
 
       Duration.hasMany(models.Rx_group_drug, {
         foreignKey: 'duration_id',
-        as: 'drug_duration',
+        as: 'duration_for',
       });
     }
   }
