@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Drug_varient.belongsTo(models.Drugs, {
         foreignKey: 'drug_id',
-        as: 'Drug',
+        as: 'drug',
       });
 
       Drug_varient.belongsTo(models.When, {

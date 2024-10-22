@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
 
       When.hasMany(models.Rx_group_drug, {
         foreignKey: 'when_id',
-        as: 'When_drug',
+        as: 'drugWhen',
       });
     }
   }

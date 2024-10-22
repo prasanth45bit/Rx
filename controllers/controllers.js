@@ -1,7 +1,7 @@
 const { login_data, get_rx_group, get_drug, insert_rx_group, 
   insert_rx_drug, rename_rx_group, set_rx_active, delete_rx_drug,
    get_drug_when, get_drug_frequency, get_drug_time, get_drug_duration,
-    set_rx_drug_update1, set_rx_drug_update2 } = require("../rx_group/rx_group.js");
+    set_rx_drug_update1, set_rx_drug_update2, get_specific_rx_drug_data } = require("../rx_group/rx_group.js");
 const bcrypt = require('bcrypt');
 
 
@@ -25,6 +25,18 @@ const login = (req, res) => {
 const get_rx = (req, res) => {
   const { doctor_id } = req.body;
   get_rx_group(doctor_id, (err, result) => {
+    if (err) {
+      res.status(500).json({ message: "Internal Server Error" });
+    } else {
+      res.status(200).json(result);
+    }
+  });
+};
+
+
+const get_specific_rx_drug = (req, res) => {
+  const { rx_group_id } = req.body;
+  get_specific_rx_drug_data(rx_group_id, (err, result) => {
     if (err) {
       res.status(500).json({ message: "Internal Server Error" });
     } else {
@@ -215,5 +227,6 @@ module.exports = {
   get_duration,
   get_frequency,
   rx_drug_update1,
-  rx_drug_update2
+  rx_drug_update2,
+  get_specific_rx_drug
 };

@@ -12,22 +12,22 @@ module.exports = (sequelize, DataTypes) => {
 
       Rx_group_drug.belongsTo(models.When, {
         foreignKey: 'when_id',
-        as: 'When', 
+        as: 'drugWhen', 
       });
 
       Rx_group_drug.belongsTo(models.Duration, {
         foreignKey: 'duration_id',
-        as: 'Duration', 
+        as: 'drugDuration', 
       });
 
       Rx_group_drug.belongsTo(models.Time, {
         foreignKey: 'time_id',
-        as: 'Time', 
+        as: 'drugTime', 
       });
 
       Rx_group_drug.belongsTo(models.Frequency, {
         foreignKey: 'frequency_id',
-        as: 'Frequency', 
+        as: 'drugFrequency', 
       });
 
     }

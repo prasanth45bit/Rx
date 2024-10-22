@@ -12,7 +12,7 @@
 
         Time.hasMany(models.Rx_group_drug, {
           foreignKey: 'time_id',
-          as: 'Time-drug',
+          as: 'drugTime',
         });
       }
     }

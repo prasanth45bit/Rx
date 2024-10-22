@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
 
       Drugs.hasMany(models.Drug_varient, {
         foreignKey: 'drug_id',
-        as: 'Drug_varients', 
+        as: 'drug', 
       });
     }
   }

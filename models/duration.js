@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
 
       Duration.hasMany(models.Rx_group_drug, {
         foreignKey: 'duration_id',
-        as: 'duration_for',
+        as: 'drugDuration',
       });
     }
   }

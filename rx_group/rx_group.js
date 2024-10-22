@@ -56,26 +56,33 @@ const get_rx_group = async (doctor_id, callback) => {
           include: [
             {
               model: Drug_varient,
+              attributes: ['drug_varient', 'drug_id'],
+              include : [
+                {
+                  model: Drugs,
+                  as:'drug',
+                  attributes: ['drug_name'],
+                }
+              ]
             },
-
-              {
+            {
                 model: Duration,
-                as: 'drugVariantsDuration', 
+                as: 'drugDuration', 
                 attributes: ['duration_count', 'duration_type'],
               },
               {
                 model: Time,
-                as: 'drugVariantsTime', 
+                as: 'drugTime', 
                 attributes: ['time'],
               },
               {
                 model: When,
-                as: 'drugVariantsWhen', // Make sure this matches your actual alias
+                as: 'drugWhen', 
                 attributes: ['when'],
               },
               {
                 model: Frequency,
-                as: 'drugVariantsFrequency', // Update to the new alias
+                as: 'drugFrequency',
                 attributes: ['frequency'],
               },
             ],
@@ -94,6 +101,62 @@ const get_rx_group = async (doctor_id, callback) => {
   }
 };
 
+const get_specific_rx_drug_data = async (rx_group_id, callback) => {
+  try {
+    const rxGroup = await Rx_group.findOne({
+      where: { id: rx_group_id }, 
+      include: [
+        {
+          model: Rx_group_drug,
+          include: [
+            {
+              model: Drug_varient,
+              attributes: ['drug_varient', 'drug_id'],
+              include: [
+                {
+                  model: Drugs,
+                  as: 'drug',
+                  attributes: ['drug_name'],
+                }
+              ]
+            },
+            {
+              model: Duration,
+              as: 'drugDuration', 
+              attributes: ['duration_count', 'duration_type'],
+            },
+            {
+              model: Time,
+              as: 'drugTime', 
+              attributes: ['time'],
+            },
+            {
+              model: When,
+              as: 'drugWhen', 
+              attributes: ['when'],
+            },
+            {
+              model: Frequency,
+              as: 'drugFrequency',
+              attributes: ['frequency'],
+            },
+          ],
+        },
+      ],
+    });
+
+    if (!rxGroup) {
+      return callback(new Error("RX group not found"), null);
+    }
+
+    callback(null, rxGroup);
+  } catch (error) {
+    console.error("Error during fetching specific RX drug data: ", error);
+    callback(error, null);
+  }
+};
+
+
 
 
 const get_drug = async (callback) => {
@@ -102,7 +165,7 @@ const get_drug = async (callback) => {
       include: [
         {
           model: Drugs,
-          as: 'Drug',
+          as: 'drug',
           include: [
             {
               model: Drug_catagory,
@@ -142,7 +205,6 @@ const insert_rx_group = async (rxGroupData) => {
   try {
     const rxGroup = await Rx_group.create(
       {
-        id: rxGroupData.rx_group_id,
         rx_group_name: rxGroupData.rx_group_name,
         doctor_id: rxGroupData.doctor_id,
       }
@@ -223,6 +285,7 @@ const set_rx_active = async (rx_group_id, active, callback) => {
     callback(error, null);
   }
 };
+
 
 
 
@@ -356,5 +419,6 @@ module.exports = {
   get_drug_time,
   get_drug_duration,
   set_rx_drug_update1,
-  set_rx_drug_update2
+  set_rx_drug_update2,
+  get_specific_rx_drug_data
 };
