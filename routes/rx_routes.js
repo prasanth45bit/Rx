@@ -15,7 +15,7 @@ const {
   router.post("/get_specific_rx_drug",get_specific_rx_drug);
   router.post("/post_rx",post_rx);
   router.post("/post_rx_drug",post_rx_drug);
-  router.post("/rename_rx",rx_rename);
+  router.put("/rename_rx",rx_rename);
   router.post("/rx_active",rx_active);
   router.post("/del_rx_drug",del_rx_drug);
   router.get("/get_when",get_when);
